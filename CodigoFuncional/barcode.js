@@ -80,7 +80,7 @@ var barcode = function() {
 				//max: 1440
 			},
 			aspectRatio: {min: 1, max: 100},
-			facingMode: "enviroment"
+			facingMode: {exact:"enviroment"}
 		};
 
 		if (navigator.getUserMedia) {
