@@ -9,15 +9,21 @@ if(navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
     navigator.mediaDevices.getUserMedia(constraints).then(stream => video.srcObject = stream);
 }
 
-//const detector = new barcodeDetector({formats: ['ean_13','upc_a','upc_e']});
+const detector = new BarcodeDetector({formats: ['ean_13','upc_a','upc_e']});
 
-let formats;
+if (detector) {
+    console.log('Barcode Detector supported!');
+    setInterval(detectCode, 100);
+} else {
+    console.log('Barcode Detector is not supported by this browser.');
+}
+/*let formats;
 BarcodeDetector.getSupportedFormats().then(arr => formats=arr);
 
-const barcodeDetector = new BarcodeDetector({formats});
+const barcodeDetector = new BarcodeDetector({formats});*/
 
-const detectCode = () =>{
-    barcodeDetector.detect(video).then(codes=>{
+function detectCode () {
+    detector.detect(video).then(codes=>{
         if(codes.length === 0) return;
         for (const barcode of codes) {
             console.log(barcode);
@@ -28,5 +34,3 @@ const detectCode = () =>{
         window.alert("No se pudo leer el codigo de barras por: "+err);
     })
 }
-
-setInterval(detectCode, 100);
