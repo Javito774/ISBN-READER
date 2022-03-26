@@ -69,6 +69,7 @@ var barcode = function() {
 		elements.ctxg = elements.canvasg.getContext('2d');
 
 		if (navigator.getUserMedia) {
+			navigator.mediaDevices.enumerateDevices().then(gotDevices);
 			navigator.mediaDevices.getUserMedia({audio: false, video: true}).then(stream => elements.video.srcObject = stream);
 			/*navigator.getUserMedia({audio: false, video: true}, function(stream) {
 				//elements.video.src = window.URL.createObjectURL(stream);
@@ -77,6 +78,59 @@ var barcode = function() {
 				console.log(error);
 			});*/
 		}
+		const select = document.getElementById('select');
+		const button = document.getElementById('button');
+		let currentStream;
+
+		function stopMediaTracks(stream) {
+			stream.getTracks().forEach(track => {
+				track.stop();
+			});
+		}
+
+		function gotDevices(mediaDevices) {
+			select.innerHTML = '';
+			select.appendChild(document.createElement('option'));
+			let count = 1;
+			mediaDevices.forEach(mediaDevice => {
+				if (mediaDevice.kind === 'videoinput') {
+					const option = document.createElement('option');
+					option.value = mediaDevice.deviceId;
+					const label = mediaDevice.label || `Camera ${count++}`;
+					const textNode = document.createTextNode(label);
+					option.appendChild(textNode);
+					select.appendChild(option);
+				}
+			});
+		}
+
+		button.addEventListener('click', event => {
+			if (typeof currentStream !== 'undefined') {
+				stopMediaTracks(currentStream);
+			}
+			const videoConstraints = {};
+			if (select.value === '') {
+				videoConstraints.facingMode = 'environment';
+			} else {
+				videoConstraints.deviceId = { exact: select.value };
+			}
+			const constraints = {
+				video: videoConstraints,
+				audio: false
+			};
+
+			navigator.mediaDevices
+				.getUserMedia(constraints)
+				.then(stream => {
+					currentStream = stream;
+					video.srcObject = stream;
+					return navigator.mediaDevices.enumerateDevices();
+				})
+				.then(gotDevices)
+				.catch(error => {
+					console.error(error);
+				});
+		});
 
 		elements.video.addEventListener('canplay', function(e) {
 
