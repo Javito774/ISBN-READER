@@ -68,9 +68,24 @@ var barcode = function() {
 		elements.canvasg = document.querySelector(config.canvasg);
 		elements.ctxg = elements.canvasg.getContext('2d');
 
+		const videoConstraints = {
+			width: {
+				min: 640
+				//ideal: 1920,
+				//max: 2560,
+			},
+			height: {
+				min: 480
+				//ideal: 1080,
+				//max: 1440
+			},
+			aspectRatio: {min: 1, max: 100},
+			facingMode: "enviroment"
+		};
+
 		if (navigator.getUserMedia) {
 			navigator.mediaDevices.enumerateDevices().then(gotDevices);
-			navigator.mediaDevices.getUserMedia({audio: false, video: true}).then(stream => elements.video.srcObject = stream);
+			navigator.mediaDevices.getUserMedia({audio: false, video: videoConstraints}).then(stream => elements.video.srcObject = stream);
 			/*navigator.getUserMedia({audio: false, video: true}, function(stream) {
 				//elements.video.src = window.URL.createObjectURL(stream);
 				//elements.video.src = stream;
