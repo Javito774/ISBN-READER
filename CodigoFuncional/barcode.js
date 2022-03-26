@@ -79,8 +79,7 @@ var barcode = function() {
 				//ideal: 1080,
 				//max: 1440
 			},
-			aspectRatio: {min: 1, max: 100},
-			facingMode: {exact:"enviroment"}
+			aspectRatio: {min: 1, max: 100}
 		};
 
 		if (navigator.getUserMedia) {
@@ -123,7 +122,7 @@ var barcode = function() {
 				stopMediaTracks(currentStream);
 			}
 			if (select.value === '') {
-				videoConstraints.facingMode = 'environment';
+				videoConstraints.facingMode = { exact: 'environment' };
 			} else {
 				videoConstraints.deviceId = { exact: select.value };
 			}
