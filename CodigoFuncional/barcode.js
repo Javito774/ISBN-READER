@@ -122,25 +122,11 @@ var barcode = function() {
 			if (typeof currentStream !== 'undefined') {
 				stopMediaTracks(currentStream);
 			}
-			const videoConstraints = {
-				width: {
-					min: 640
-					//ideal: 1920,
-					//max: 2560,
-				},
-				height: {
-					min: 480
-					//ideal: 1080,
-					//max: 1440
-				},
-				aspectRatio: {min: 1, max: 100},
-				facingMode: "enviroment"
-			};
-			/*if (select.value === '') {
+			if (select.value === '') {
 				videoConstraints.facingMode = 'environment';
 			} else {
 				videoConstraints.deviceId = { exact: select.value };
-			}*/
+			}
 			const constraints = {
 				video: videoConstraints,
 				audio: false
