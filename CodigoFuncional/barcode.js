@@ -69,12 +69,13 @@ var barcode = function() {
 		elements.ctxg = elements.canvasg.getContext('2d');
 
 		if (navigator.getUserMedia) {
-			navigator.getUserMedia({audio: false, video: true}, function(stream) {
+			navigator.mediaDevices.getUserMedia(constraints).then(stream => elements.video.src = stream);
+			/*navigator.getUserMedia({audio: false, video: true}, function(stream) {
 				//elements.video.src = window.URL.createObjectURL(stream);
-				elements.video.src = stream;
+				//elements.video.src = stream;
 			}, function(error) {
 				console.log(error);
-			});
+			});*/
 		}
 
 		elements.video.addEventListener('canplay', function(e) {
@@ -137,7 +138,7 @@ var barcode = function() {
 		var count = 0;
 
 		for (var i = 0, ii = binary.length; i < ii; i++) {
-			if (binary[i] == current) {
+			if (binary[i] === current) {
 				count++;
 			} else {
 				pixelBars.push(count);
@@ -176,7 +177,7 @@ var barcode = function() {
 
 		// return if no starting sequence found
 
-		if (startIndex == 0) {
+		if (startIndex === 0) {
 			return;
 		}
 
@@ -340,7 +341,7 @@ var barcode = function() {
 
 	function drawBars(binary) {
 		for (var i = 0, ii = binary.length; i < ii; i++) {
-			if (binary[i] == 1) {
+			if (binary[i] === 1) {
 				elements.ctxg.strokeStyle = '#fff';
 			} else {
 				elements.ctxg.strokeStyle = '#000';
