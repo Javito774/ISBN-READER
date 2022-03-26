@@ -123,7 +123,7 @@ var barcode = function() {
 				.getUserMedia(constraints)
 				.then(stream => {
 					currentStream = stream;
-					video.srcObject = stream;
+					elements.video.srcObject = stream;
 					return navigator.mediaDevices.enumerateDevices();
 				})
 				.then(gotDevices)
