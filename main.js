@@ -64,7 +64,7 @@ var MediaStreamHelper = {
     }
 };
 
-var videoElement = document.querySelector("video");
+let videoDevices = null;
 
 function changeCamera() {
     console.log("Cambiando camara");
@@ -75,6 +75,18 @@ function changeCamera() {
     MediaStreamHelper._deviceId = videoDevices[MediaStreamHelper._indexSelected].deviceId;
     MediaStreamHelper.requestStream().then(function(stream){
         MediaStreamHelper._stream = stream;
-        videoElement.srcObject = stream;
+        video.srcObject = stream;
     });
 }
+
+async function solicitarMedia() {
+    const stream = await MediaStreamHelper.requestStream();
+    MediaStreamHelper._stream = stream;
+    video.srcObject = stream;
+}
+
+MediaStreamHelper.getDevices().then(function(devices) {
+    videoDevices =  devices.filter(device => device.kind === "videoinput");
+    MediaStreamHelper._deviceId = videoDevices[0].deviceId;
+    solicitarMedia().then(()=>video.play());
+});
