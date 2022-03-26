@@ -20,7 +20,24 @@ if(navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
         audio: false
     }
 
-    navigator.mediaDevices.getUserMedia(constraints).then(stream => video.srcObject = stream);
+    navigator.mediaDevices.getUserMedia(constraints).then(gotMedia);
+}
+
+function gotMedia(mediastream) {
+    video.srcObject = mediastream;
+
+    const track = mediastream.getVideoTracks()[0];
+    const capabilities = track.getCapabilities();
+
+    if (!capabilities.focusDistance) {
+        return;
+    }
+
+    track.applyConstraints({
+        advanced: [{
+            focusMode: "auto"
+        }]
+    });
 }
 
 //const detector = new BarcodeDetector({formats: ['ean_13','upc_a','upc_e']});
