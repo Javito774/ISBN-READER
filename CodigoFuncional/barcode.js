@@ -109,18 +109,17 @@ var barcode = function() {
 			}
 			const videoConstraints = {
 				width: {
-					min: 1280,
-					ideal: 1920,
-					max: 2560,
+					min: 640
+					//ideal: 1920,
+					//max: 2560,
 				},
 				height: {
-					min: 720,
-					ideal: 1080,
-					max: 1440
+					min: 480
+					//ideal: 1080,
+					//max: 1440
 				},
-				facingMode: {
-					exact: 'environment'
-				}
+				aspectRatio: {min: 1, max: 100},
+				facingMode: "enviroment"
 			};
 			/*if (select.value === '') {
 				videoConstraints.facingMode = 'environment';
