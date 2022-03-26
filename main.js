@@ -55,6 +55,7 @@ if (detector) {
 
 const detectCode =  ()=> {
     detector.detect(video).then(codes=>{
+        document.querySelector("span").innerHTML="Encontrado";
         if(codes.length === 0) return;
         for (const barcode of codes) {
             console.log(barcode);
@@ -62,6 +63,7 @@ const detectCode =  ()=> {
         }
     }).catch(err => {
         console.error(err);
+        document.querySelector("span").innerHTML="Buscando...";
     })
 }
 setInterval(detectCode, 100);
