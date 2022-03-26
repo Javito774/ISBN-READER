@@ -79,7 +79,6 @@ var barcode = function() {
 			});*/
 		}
 		const select = document.getElementById('select');
-		const button = document.getElementById('button');
 		let currentStream;
 
 		function stopMediaTracks(stream) {
@@ -104,7 +103,7 @@ var barcode = function() {
 			});
 		}
 
-		button.addEventListener('click', event => {
+		select.addEventListener('change', event => {
 			if (typeof currentStream !== 'undefined') {
 				stopMediaTracks(currentStream);
 			}
