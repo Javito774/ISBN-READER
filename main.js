@@ -2,7 +2,21 @@ const video = document.querySelector("video");
 
 if(navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
     const constraints = {
-        video:  true,
+        video:  {
+            width: {
+                min: 1280,
+                ideal: 1920,
+                max: 2560,
+            },
+            height: {
+                min: 720,
+                ideal: 1080,
+                max: 1440
+            },
+            facingMode: {
+                exact: 'environment'
+            }
+        },
         audio: false
     }
 
@@ -33,59 +47,3 @@ const detectCode =  ()=> {
     })
 }
 setInterval(detectCode, 100);
-
-var MediaStreamHelper = {
-    _streaming: false,
-    _stream: null,
-    _deviceId: null,
-    _indexSelected: 0,
-    getDevices: function() {
-        return navigator.mediaDevices.enumerateDevices();
-    },
-    requestStream: function() {
-        console.log("Solicitando nueva información del user media con la camara: "+ this._deviceId);
-        this.stopStreaming();
-        const videoSource = this._deviceId;
-        const constraints = {
-            video: {
-                deviceId: videoSource ? {exact: videoSource} : undefined
-            }
-        };
-        return navigator.mediaDevices.getUserMedia(constraints);
-    },
-    stopStreaming: function() {
-        clearInterval(intervalo);
-        if (this._stream) {
-            this._stream.getTracks().forEach(track => {
-                track.stop();
-            });
-        }
-    }
-};
-
-let videoDevices = null;
-
-function changeCamera() {
-    console.log("Cambiando camara");
-    MediaStreamHelper.stopStreaming();
-    MediaStreamHelper._indexSelected + 1 < videoDevices.length ?
-        MediaStreamHelper._indexSelected += 1:
-        MediaStreamHelper._indexSelected = 0;
-    MediaStreamHelper._deviceId = videoDevices[MediaStreamHelper._indexSelected].deviceId;
-    MediaStreamHelper.requestStream().then(function(stream){
-        MediaStreamHelper._stream = stream;
-        video.srcObject = stream;
-    });
-}
-
-async function solicitarMedia() {
-    const stream = await MediaStreamHelper.requestStream();
-    MediaStreamHelper._stream = stream;
-    video.srcObject = stream;
-}
-
-MediaStreamHelper.getDevices().then(function(devices) {
-    videoDevices =  devices.filter(device => device.kind === "videoinput");
-    MediaStreamHelper._deviceId = videoDevices[0].deviceId;
-    solicitarMedia().then(()=>video.play());
-});
