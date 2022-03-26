@@ -30,7 +30,6 @@ const detectCode =  ()=> {
         }
     }).catch(err => {
         console.error(err);
-        window.alert("No se pudo leer el codigo de barras por: "+err);
     })
 }
 setInterval(detectCode, 100);
