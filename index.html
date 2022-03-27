@@ -1,14 +1,81 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Prueba codigo de barras</title>
-    <link rel="stylesheet" href="estilos.css">
+
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+
+	<link rel="stylesheet" href="style.css" />
+	<script type="text/javascript" src="jquery.js"></script>
+	<script type="text/javascript" src="barcode.js"></script>
+
+<script type="text/javascript">
+
+	const sound = new Audio("barcode.wav");
+
+	$(document).ready(function() {
+
+	barcode.config.start = 0.1;
+	barcode.config.end = 0.9;
+	barcode.config.video = '#barcodevideo';
+	barcode.config.canvas = '#barcodecanvas';
+	barcode.config.canvasg = '#barcodecanvasg';
+	barcode.setHandler(function(barcode) {
+		$('#result').html(barcode);
+	});
+	barcode.init();
+
+	$('#result').bind('DOMSubtreeModified', function(e) {
+		sound.play();
+		barcode.stopMediaTracks();
+		let req = new XMLHttpRequest();
+		req.open('GET',"https://www.googleapis.com/books/v1/volumes?q=isbn%3C"+document.querySelector('#result').innerText+"%3E");
+		req.onreadystatechange = function (aEvt) {
+			if (req.readyState === 4) {
+				if(req.status !== 200) {
+					console.error("No se pueden realizar busquedas ahora mismo.");
+					return;
+				}
+				let respuesta = JSON.parse(aEvt.target.responseText)
+				mostrarResultadosBusqueda(respuesta);
+			}
+		};
+		req.send(null);
+	});
+	function mostrarResultadosBusqueda(respuesta) {
+		document.querySelector(".barcode-wrap").style.display = "none";
+		document.querySelector(".libro-container").style.display = "grid";
+		console.log(respuesta);
+		if (respuesta.items.length>0)
+		{
+			document.querySelector(".libro-container img").src = respuesta.items[0].volumeInfo.imageLinks.thumbnail;
+			document.querySelector(".libro-titulo").innerHTML = respuesta.items[0].volumeInfo.title;
+			document.querySelector(".libro-descripcion").innerHTML = respuesta.items[0].volumeInfo.description;
+		}
+	}
+});
+
+</script>
+
 </head>
 <body>
-    <video width="640" height="480" autoplay></video>
-    <p>Estado: <span></span></p>
-    <script src="main.js" async></script>
+	<header>
+		<h1>Book Scanner</h1>
+	</header>
+	<div class="barcode-wrap">
+		<div id="barcode">
+			<video id="barcodevideo" autoplay></video>
+			<canvas id="barcodecanvasg" ></canvas>
+		</div>
+		<canvas id="barcodecanvas" ></canvas>
+		<div id="result"></div>
+		<select id="select"></select>
+	</div>
+	<div class="libro-container">
+		<img src=""/>
+		<h2 class="libro-titulo"></h2>
+		<p class="libro-descripcion"></p>
+	</div>
 </body>
 </html>
