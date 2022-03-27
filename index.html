@@ -33,7 +33,7 @@
 		sound.play();
 		barcode.stopMediaTracks();
 		let req = new XMLHttpRequest();
-		req.open('GET',"https://www.googleapis.com/books/v1/volumes?q=isbn%3C"+document.querySelector('#result').innerText+"%3E");
+		req.open('GET',"https://www.googleapis.com/books/v1/volumes?q=isbn:"+document.querySelector('#result').innerText);
 		req.onreadystatechange = function (aEvt) {
 			if (req.readyState === 4) {
 				if(req.status !== 200) {
