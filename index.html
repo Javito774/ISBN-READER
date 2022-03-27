@@ -40,7 +40,8 @@
 					console.error("No se pueden realizar busquedas ahora mismo.");
 					return;
 				}
-				let respuesta = JSON.parse(aEvt.target.responseText)
+				let respuesta = JSON.parse(aEvt.target.responseText);
+				console.log(respuesta);
 				mostrarResultadosBusqueda(respuesta);
 			}
 		};
@@ -52,7 +53,8 @@
 		console.log(respuesta);
 		if (respuesta.items.length>0)
 		{
-			document.querySelector(".libro-container img").src = respuesta.items[0].volumeInfo.imageLinks.thumbnail;
+			if(respuesta.items[0].volumeInfo.imageLinks.thumbnail)
+				document.querySelector(".libro-container img").src = respuesta.items[0].volumeInfo.imageLinks.thumbnail;
 			document.querySelector(".libro-titulo").innerHTML = respuesta.items[0].volumeInfo.title;
 			document.querySelector(".libro-descripcion").innerHTML = respuesta.items[0].volumeInfo.description;
 		}
