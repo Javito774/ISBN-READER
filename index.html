@@ -53,7 +53,7 @@
 		console.log(respuesta);
 		if (respuesta.items.length>0)
 		{
-			if(respuesta.items[0].volumeInfo.imageLinks.thumbnail)
+			if(respuesta.items[0].volumeInfo.imageLinks && respuesta.items[0].volumeInfo.imageLinks.thumbnail)
 				document.querySelector(".libro-container img").src = respuesta.items[0].volumeInfo.imageLinks.thumbnail;
 			document.querySelector(".libro-titulo").innerHTML = respuesta.items[0].volumeInfo.title;
 			document.querySelector(".libro-descripcion").innerHTML = respuesta.items[0].volumeInfo.description;
