@@ -69,6 +69,10 @@ const barcode = function () {
         elements.canvasg = document.querySelector(config.canvasg);
         elements.ctxg = elements.canvasg.getContext('2d');
 
+        elements.video.setAttribute('autoplay', '');
+        elements.video.setAttribute('muted', '');
+        elements.video.setAttribute('playsinline', '');
+
         const videoConstraints = {
             width: {
                 min: 640
@@ -82,7 +86,6 @@ const barcode = function () {
             },
             aspectRatio: {min: 1, max: 100}
         };
-
         if (navigator.mediaDevices.getUserMedia) {
             navigator.mediaDevices.enumerateDevices().then(gotDevices);
             navigator.mediaDevices.getUserMedia({
