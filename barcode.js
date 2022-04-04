@@ -69,9 +69,8 @@ const barcode = function () {
         elements.canvasg = document.querySelector(config.canvasg);
         elements.ctxg = elements.canvasg.getContext('2d');
 
-        elements.video.setAttribute('autoplay', '');
-        elements.video.setAttribute('muted', '');
-        elements.video.setAttribute('playsinline', '');
+        elements.video.style.width = document.width + 'px';
+        elements.video.style.height = document.height + 'px';
 
         const videoConstraints = {
             width: {
