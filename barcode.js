@@ -61,7 +61,7 @@ const barcode = function () {
     function init() {
 
         window.URL = window.URL || window.webkitURL;
-        navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia;
+        navigator.mediaDevices.getUserMedia = navigator.mediaDevices.getUserMedia || navigator.mediaDevices.webkitGetUserMedia || navigator.mediaDevices.mozGetUserMedia || navigator.mediaDevices.msGetUserMedia;
 
         elements.video = document.querySelector(config.video);
         elements.canvas = document.querySelector(config.canvas);
@@ -83,7 +83,7 @@ const barcode = function () {
             aspectRatio: {min: 1, max: 100}
         };
 
-        if (navigator.getUserMedia) {
+        if (navigator.mediaDevices.getUserMedia) {
             navigator.mediaDevices.enumerateDevices().then(gotDevices);
             navigator.mediaDevices.getUserMedia({
                 audio: false,
